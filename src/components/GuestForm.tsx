@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -126,7 +127,7 @@ const GuestForm: React.FC<GuestFormProps> = ({ guestId, isOpen, onClose, onSaved
   
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="w-[95vw] max-w-[600px] p-4 sm:p-6">
+      <DialogContent className="w-[95vw] max-w-[600px] p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
         <DialogHeader className="space-y-2">
           <DialogTitle>{guestId ? 'Edit Guest' : 'Add New Guest'}</DialogTitle>
         </DialogHeader>
@@ -165,13 +166,13 @@ const GuestForm: React.FC<GuestFormProps> = ({ guestId, isOpen, onClose, onSaved
                       {checkIn ? format(checkIn, "PPP") : "Select date"}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent className="w-auto p-0" align={isMobile ? "center" : "start"}>
                     <Calendar
                       mode="single"
                       selected={checkIn}
                       onSelect={setCheckIn}
                       initialFocus
-                      className="rounded-md border"
+                      className={cn("rounded-md border pointer-events-auto")}
                     />
                   </PopoverContent>
                 </Popover>
@@ -194,13 +195,13 @@ const GuestForm: React.FC<GuestFormProps> = ({ guestId, isOpen, onClose, onSaved
                       {checkOut ? format(checkOut, "PPP") : "Select date"}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent className="w-auto p-0" align={isMobile ? "center" : "start"}>
                     <Calendar
                       mode="single"
                       selected={checkOut}
                       onSelect={setCheckOut}
                       initialFocus
-                      className="rounded-md border"
+                      className={cn("rounded-md border pointer-events-auto")}
                     />
                   </PopoverContent>
                 </Popover>
@@ -239,7 +240,7 @@ const GuestForm: React.FC<GuestFormProps> = ({ guestId, isOpen, onClose, onSaved
                 onChange={(e) => setPurposeOfVisit(e.target.value)}
                 placeholder="Purpose of visit (optional)"
                 className="resize-none w-full"
-                rows={2}
+                rows={isMobile ? 3 : 2}
               />
             </div>
             
@@ -253,7 +254,7 @@ const GuestForm: React.FC<GuestFormProps> = ({ guestId, isOpen, onClose, onSaved
             </div>
           </div>
           
-          <DialogFooter className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-0 mt-6">
+          <DialogFooter className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-2 mt-6">
             <Button 
               type="button" 
               variant="outline" 
