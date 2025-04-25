@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -51,6 +52,16 @@ export default {
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
+				},
+				excel: {
+					header: '#F3F3F3',
+					cell: '#FFFFFF',
+					border: '#E6E6E6',
+					hover: '#EDF3F9',
+					selected: '#D3E4FD',
+					text: '#1A1F2C',
+					muted: '#8E9196',
+					highlight: '#33C3F0'
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
