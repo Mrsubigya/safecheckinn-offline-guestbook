@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
+import Watermark from "./components/Watermark";
 
 const queryClient = new QueryClient();
 
@@ -14,6 +15,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <SplashScreen />
+      <Watermark />
       <Toaster />
       <Sonner />
       <BrowserRouter>
