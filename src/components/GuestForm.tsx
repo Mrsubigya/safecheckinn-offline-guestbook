@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +12,7 @@ import { Guest, guestDb } from "@/lib/db";
 import IDUploader from './IDUploader';
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface GuestFormProps {
   guestId?: string;
@@ -22,6 +22,7 @@ interface GuestFormProps {
 }
 
 const GuestForm: React.FC<GuestFormProps> = ({ guestId, isOpen, onClose, onSaved }) => {
+  const isMobile = useIsMobile();
   const [name, setName] = useState('');
   const [checkIn, setCheckIn] = useState<Date | undefined>(new Date());
   const [checkOut, setCheckOut] = useState<Date | undefined>(new Date());
@@ -32,7 +33,6 @@ const GuestForm: React.FC<GuestFormProps> = ({ guestId, isOpen, onClose, onSaved
   const [idBackImage, setIdBackImage] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Load guest data if editing
   useEffect(() => {
     const loadGuest = async () => {
       if (guestId) {
@@ -61,7 +61,6 @@ const GuestForm: React.FC<GuestFormProps> = ({ guestId, isOpen, onClose, onSaved
     }
   }, [guestId, isOpen]);
   
-  // Reset form on close
   useEffect(() => {
     if (!isOpen) {
       if (!guestId) {
@@ -127,16 +126,15 @@ const GuestForm: React.FC<GuestFormProps> = ({ guestId, isOpen, onClose, onSaved
   
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
+      <DialogContent className="w-[95vw] max-w-[600px] p-4 sm:p-6">
+        <DialogHeader className="space-y-2">
           <DialogTitle>{guestId ? 'Edit Guest' : 'Add New Guest'}</DialogTitle>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-6 py-4">
-            {/* Guest Name */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="name" className="text-right">
+              <Label htmlFor="name">
                 Guest Name <span className="text-red-500">*</span>
               </Label>
               <Input
@@ -145,13 +143,13 @@ const GuestForm: React.FC<GuestFormProps> = ({ guestId, isOpen, onClose, onSaved
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Full name"
                 required
+                className="w-full"
               />
             </div>
             
-            {/* Check-in/Check-out Dates */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="check-in" className="text-right">
+                <Label htmlFor="check-in">
                   Check-in Date <span className="text-red-500">*</span>
                 </Label>
                 <Popover>
@@ -159,7 +157,7 @@ const GuestForm: React.FC<GuestFormProps> = ({ guestId, isOpen, onClose, onSaved
                     <Button
                       variant="outline"
                       className={cn(
-                        "justify-start text-left font-normal",
+                        "w-full justify-start text-left font-normal",
                         !checkIn && "text-muted-foreground"
                       )}
                     >
@@ -173,14 +171,14 @@ const GuestForm: React.FC<GuestFormProps> = ({ guestId, isOpen, onClose, onSaved
                       selected={checkIn}
                       onSelect={setCheckIn}
                       initialFocus
-                      className="p-3 pointer-events-auto"
+                      className="rounded-md border"
                     />
                   </PopoverContent>
                 </Popover>
               </div>
               
               <div className="grid gap-2">
-                <Label htmlFor="check-out" className="text-right">
+                <Label htmlFor="check-out">
                   Check-out Date <span className="text-red-500">*</span>
                 </Label>
                 <Popover>
@@ -188,7 +186,7 @@ const GuestForm: React.FC<GuestFormProps> = ({ guestId, isOpen, onClose, onSaved
                     <Button
                       variant="outline"
                       className={cn(
-                        "justify-start text-left font-normal",
+                        "w-full justify-start text-left font-normal",
                         !checkOut && "text-muted-foreground"
                       )}
                     >
@@ -202,76 +200,73 @@ const GuestForm: React.FC<GuestFormProps> = ({ guestId, isOpen, onClose, onSaved
                       selected={checkOut}
                       onSelect={setCheckOut}
                       initialFocus
-                      className="p-3 pointer-events-auto"
+                      className="rounded-md border"
                     />
                   </PopoverContent>
                 </Popover>
               </div>
             </div>
             
-            {/* Room & Contact */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="room" className="text-right">
-                  Room Number
-                </Label>
+                <Label htmlFor="room">Room Number</Label>
                 <Input
                   id="room"
                   value={roomNumber}
                   onChange={(e) => setRoomNumber(e.target.value)}
                   placeholder="Room number"
+                  className="w-full"
                 />
               </div>
               
               <div className="grid gap-2">
-                <Label htmlFor="contact" className="text-right">
-                  Contact Number
-                </Label>
+                <Label htmlFor="contact">Contact Number</Label>
                 <Input
                   id="contact"
                   value={contactNumber}
                   onChange={(e) => setContactNumber(e.target.value)}
                   placeholder="Phone number"
+                  className="w-full"
                 />
               </div>
             </div>
             
-            {/* Purpose of Visit */}
             <div className="grid gap-2">
-              <Label htmlFor="purpose" className="text-right">
-                Purpose of Visit
-              </Label>
+              <Label htmlFor="purpose">Purpose of Visit</Label>
               <Textarea
                 id="purpose"
                 value={purposeOfVisit}
                 onChange={(e) => setPurposeOfVisit(e.target.value)}
                 placeholder="Purpose of visit (optional)"
-                className="resize-none"
+                className="resize-none w-full"
                 rows={2}
               />
             </div>
             
-            {/* ID Document */}
-            <IDUploader
-              frontImage={idFrontImage}
-              backImage={idBackImage}
-              onFrontImageChange={setIdFrontImage}
-              onBackImageChange={setIdBackImage}
-            />
+            <div className="w-full">
+              <IDUploader
+                frontImage={idFrontImage}
+                backImage={idBackImage}
+                onFrontImageChange={setIdFrontImage}
+                onBackImageChange={setIdBackImage}
+              />
+            </div>
           </div>
           
-          <DialogFooter>
+          <DialogFooter className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-0 mt-6">
             <Button 
               type="button" 
               variant="outline" 
               onClick={onClose}
               disabled={isSubmitting}
+              className="w-full sm:w-auto"
             >
               Cancel
             </Button>
             <Button 
               type="submit" 
               disabled={isSubmitting}
+              className="w-full sm:w-auto"
             >
               {isSubmitting ? 'Saving...' : guestId ? 'Update Guest' : 'Add Guest'}
             </Button>
